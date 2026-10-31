@@ -1,3 +1,5 @@
+from functools import reduce
+
 # EJ 1
 
 # Slicing recorriendo la cadena hacia atrás
@@ -16,4 +18,26 @@ print("5. Números en string:", palindromos(["12321", "12345", "11", "10"]))
 
 # EJ 2
 
-def suma_cuadrados(n):
+# Dividí en funciones puras por separado porque una línea de lambda no la entiendo
+# Ambas devuelven un único valor directamente de su param de entrada y no hay estado mutable
+def elevar_al_cuadrado(x):
+  return x ** 2
+
+def sumar_dos_numeros(acc, nuevo_num):
+  return acc + nuevo_num
+
+# Se pasan como args dentro de los objetos
+def cuadrados_sumados(n):
+  nums = range(1, n +1)
+
+  cuadrados = map(elevar_al_cuadrado, nums)
+
+  sum_total = reduce(sumar_dos_numeros, cuadrados, 0)
+  return sum_total
+
+print("--- Pruebas de cuadrados_sumados ---")
+print("1. n = 1:", cuadrados_sumados(1))   # 1
+print("2. n = 3:", cuadrados_sumados(3))   # 14
+print("3. n = 4:", cuadrados_sumados(4))   # 30
+print("4. n = 5:", cuadrados_sumados(5))   # 55
+print("5. n = 10:", cuadrados_sumados(10)) # 385
