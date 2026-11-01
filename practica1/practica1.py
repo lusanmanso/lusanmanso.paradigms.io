@@ -1,5 +1,5 @@
 from functools import reduce
-import request
+import requests
 import hashlib
 
 # EJ 1
@@ -30,7 +30,7 @@ def sumar_nuevo_num (acc, nuevo_num):
 
 # Se pasan como args dentro de los objetos
 def cuadrados_sumados(n):
-  nums = range(1, n +1)
+  nums = range(1, n + 1)
 
   cuadrados = map(elevar_al_cuadrado, nums)
 
@@ -84,12 +84,16 @@ def promedio(notas):
 # return reduce(lambda a, b: a + b, notas, 0) / len(notas)
 
 def filtrar_estudiantes(lista_estudiantes):
-  aprobados = filter(lambda estudiantes: promedio(estudiantes["calificaciones"]) >= 6, estudiantes)
+  aprobados = filter(lambda est: promedio(est["calificaciones"]) >= 6, lista_estudiantes)
   return list(aprobados)
 
 print("--- Pruebas de filtrado de estudiantes (promedio >= 6) ---")
 # Juan, Pedro y Maria aprueban; Ana y Luis suspenden)
-print(filtrar_estudiantes(estudiantes))
+print("1. Caso general:", filtrar_estudiantes(estudiantes))
+print("2. Todos aprueban:", filtrar_estudiantes([{"nombre": "Carlos", "calificaciones": [8, 9, 10]}, {"nombre": "Lucia", "calificaciones": [6, 7, 6]}]))
+print("3. Ninguno aprueba:", filtrar_estudiantes([{"nombre": "Jorge", "calificaciones": [2, 3, 4]}, {"nombre": "Elena", "calificaciones": [5, 5, 5]}]))
+print("4. Casos límite:", filtrar_estudiantes([{"nombre": "Casi", "calificaciones": [6, 6, 5]}, {"nombre": "Justo", "calificaciones": [5, 6, 7]}]))
+print("5. Distinto número de notas:", filtrar_estudiantes([{"nombre": "Uno", "calificaciones": [6]}, {"nombre": "Varios", "calificaciones": [10, 2, 8, 4, 6]}]))
 
 # EJ 5 - HaveIBeenPawned
 
@@ -114,9 +118,9 @@ def request(url, callback_success, callback_error):
   try:
     answer = requests.get(url, timeout = 10)
     if answer.status_code == 200:
-      callback_success(respuesta)
+      callback_success(answer)
     else:
-      callback_error(f"HTTP status code {respuesta.status_code} in {url}")
+      callback_error(f"HTTP status code {answer.status_code} in {url}")
   except requests.exceptions.RequestException as e:
     callback_error(f"Connection error: {e}")
 
@@ -126,19 +130,19 @@ def show_domain_breach(answer):
   if not breaches:
     print("No breaches for this domain.")
   else:
-    format_breach =  lambda b: f" - {b.get('Title', 'No Title')} (Date: {b.get('BreachDate', 'N/A')}, Affected Accounts: {b.get('PwnCount', 0)})"
+    format_breach = lambda b: f" - {b.get('Title', 'No Title')} (Date: {b.get('BreachDate', 'N/A')}, Affected Accounts: {b.get('PwnCount', 0)})"
     txt_list = list(map(format_breach, breaches))
-    prin(f"Found {len(txt_list)} breaches for this domain: \n" + "\n".join(txt_list))
+    print(f"Found {len(txt_list)} breaches for this domain: \n" + "\n".join(txt_list))
 
 # Comprueba contraseña con CALLBACK tipo hash
-def check_password(pwd, callback_hash, ntml_mode=False):
+def check_password(pwd, callback_hash, ntlm_mode=False):
   full_hash = callback_hash(pwd) # Invocar el callback para obtener tipo
 
   prefix = full_hash[:5] # Primeros 5 caracteres son el sufijo
   sufix = full_hash[5:] # El resto
 
   # Construir la URL según el formato
-  if ntml_mode:
+  if ntlm_mode:
     url = f"https://api.pwnedpasswords.com/range/{prefix}?mode=ntlm"
   else:
     url = f"https://api.pwnedpasswords.com/range/{prefix}"
@@ -158,7 +162,7 @@ def check_password(pwd, callback_hash, ntml_mode=False):
 # Comprobación
 def check_domain(domain):
   url = f"https://haveibeenpwned.com/api/v3/breaches?Domain={domain}"
-  request(url, show_domain_breach, error)
+  request(url, show_domain_breach, errors)
 
 # Menú de elección
 def menu():
@@ -168,20 +172,52 @@ def menu():
     modo = input("Selecciona (1 o 2): ").strip()
 
     if modo == "1":
-        format = input("Especifica formato HASH - Estándar (SHA1) o Windows (NTLM): ").strip().upper()
+        formato = input("Especifica formato HASH - Estándar (SHA1) o Windows (NTLM): ").strip().upper()
         pwd = input("Introducir contraseña a verificar: ")
 
-        if format == "SHA1":
+        if formato == "SHA1":
             # Pasamos la función generar_hash_sha1 como CALLBACK (sin paréntesis)
-            check_password(pwd, generar_hash_sha1, modo_ntlm=False)
+            check_password(pwd, gen_hash_sha1, ntlm_mode=False)
         elif formato == "NTLM":
             # Pasamos la función generar_hash_ntlm como CALLBACK (sin paréntesis)
-            check_password(pwd, generar_hash_ntlm, modo_ntlm=True)
+            check_password(pwd, gen_hash_ntlm, ntlm_mode=True)
         else:
-            error("Formato de hash no válido. Debe elegir SHA1 o NTLM.")
+            errors("Formato de hash no válido. Debe elegir SHA1 o NTLM.")
 
     elif modo == "2":
         dominio = input("Introduzca el dominio a consultar (ej. adobe.com): ").strip()
         check_domain(dominio)
     else:
-        error("Modo no reconocido. Seleccionar 1 o 2.")
+        errors("Modo no reconocido. Seleccionar 1 o 2.")
+
+if __name__ == "__main__":
+    print("--- 1. PRUEBAS DE generar_hash_sha1 (5 ejemplos) ---")
+    print("SHA1 '123456':", gen_hash_sha1("123456"))
+    print("SHA1 'password':", gen_hash_sha1("password"))
+    print("SHA1 'admin':", gen_hash_sha1("admin"))
+    print("SHA1 'qwerty':", gen_hash_sha1("qwerty"))
+    print("SHA1 'U-tad2026!':", gen_hash_sha1("U-tad2026!"))
+
+    print("\n--- 2. PRUEBAS DE generar_hash_ntlm (5 ejemplos) ---")
+    print("NTLM '123456':", gen_hash_ntlm("123456"))
+    print("NTLM 'password':", gen_hash_ntlm("password"))
+    print("NTLM 'admin':", gen_hash_ntlm("admin"))
+    print("NTLM 'qwerty':", gen_hash_ntlm("qwerty"))
+    print("NTLM 'U-tad2026!':", gen_hash_ntlm("U-tad2026!"))
+
+    print("\n--- 3. PRUEBAS DE comprobar_password con callbacks SHA1 y NTLM (5 ejemplos) ---")
+    check_password("123456", gen_hash_sha1, ntlm_mode=False)
+    check_password("password", gen_hash_sha1, ntlm_mode=False)
+    check_password("admin", gen_hash_ntlm, ntlm_mode=True)
+    check_password("qwerty", gen_hash_ntlm, ntlm_mode=True)
+    check_password("ClaveUltraSeguraInexistente998877!", gen_hash_sha1, ntlm_mode=False)
+
+    print("\n--- 4. PRUEBAS DE comprobar_dominio (5 ejemplos) ---")
+    check_domain("adobe.com")
+    check_domain("linkedin.com")
+    check_domain("dropbox.com")
+    check_domain("yahoo.com")
+    check_domain("dominioinventadoquenoexiste12345.com")
+
+    # Finalmente, lanzamos el menú interactivo para el usuario
+    menu()
