@@ -1,6 +1,7 @@
 from functools import reduce
 import requests
 import hashlib
+from Crypto.Hash import MD4
 
 # EJ 1
 
@@ -11,12 +12,14 @@ def es_palindromo(s):
 def palindromos(lista_strings):
   return list(map(es_palindromo, lista_strings)) # Se entrega la función a sí misma para que map la use
 
-print("\n--- Pruebas de palindromos ---")
-print("1. Mixta:", palindromos(["radar", "gato", "oso", "perro"]))
-print("2. Todos True:", palindromos(["ana", "otto", "seres", " kayak".strip()]))
-print("3. Todos False:", palindromos(["cat", "dog", "hedgehog", "gecko"]))
-print("4. Un carácter y vacía:", palindromos(["a", "", "b", "ab"]))
-print("5. Números en string:", palindromos(["12321", "12345", "11", "10"]))
+print("\n" + "="*60)
+print("  EJ 1: Pruebas de palindromos")
+print("="*60)
+print(f"  1. Mixta:               {palindromos(['radar', 'gato', 'oso', 'perro'])}")
+print(f"  2. Todos True:          {palindromos(['ana', 'otto', 'seres', ' kayak'.strip()])}")
+print(f"  3. Todos False:         {palindromos(['cat', 'dog', 'hedgehog', 'gecko'])}")
+print(f"  4. Un carácter y vacía: {palindromos(['a', '', 'b', 'ab'])}")
+print(f"  5. Números en string:   {palindromos(['12321', '12345', '11', '10'])}")
 
 # EJ 2
 
@@ -37,12 +40,14 @@ def cuadrados_sumados(n):
   sum_total = reduce(sumar_nuevo_num, cuadrados, 0)
   return sum_total
 
-print("--- Pruebas de cuadrados_sumados ---")
-print("1. n = 1:", cuadrados_sumados(1))   # 1
-print("2. n = 3:", cuadrados_sumados(3))   # 14
-print("3. n = 4:", cuadrados_sumados(4))   # 30
-print("4. n = 5:", cuadrados_sumados(5))   # 55
-print("5. n = 10:", cuadrados_sumados(10)) # 385
+print("\n" + "="*60)
+print("  EJ 2: Pruebas de cuadrados_sumados")
+print("="*60)
+print(f"  1. n = 1  -> {cuadrados_sumados(1)}")   # 1
+print(f"  2. n = 3  -> {cuadrados_sumados(3)}")   # 14
+print(f"  3. n = 4  -> {cuadrados_sumados(4)}")   # 30
+print(f"  4. n = 5  -> {cuadrados_sumados(5)}")   # 55
+print(f"  5. n = 10 -> {cuadrados_sumados(10)}") # 385
 
 # EJ 3
 
@@ -57,12 +62,14 @@ def factorial(n):
 
   return res
 
-print("--- Pruebas de factorial ---")
-print("1. Factorial de 0:", factorial(0))  # Caso base: 0! = 1
-print("2. Factorial de 1:", factorial(1))  # 1
-print("3. Factorial de 4:", factorial(4))  # 24
-print("4. Factorial de 5:", factorial(5))  # 120
-print("5. Factorial de 6:", factorial(6))  # 720
+print("\n" + "="*60)
+print("  EJ 3: Pruebas de factorial")
+print("="*60)
+print(f"  1. Factorial de 0 -> {factorial(0)}")  # Caso base: 0! = 1
+print(f"  2. Factorial de 1 -> {factorial(1)}")  # 1
+print(f"  3. Factorial de 4 -> {factorial(4)}")  # 24
+print(f"  4. Factorial de 5 -> {factorial(5)}")  # 120
+print(f"  5. Factorial de 6 -> {factorial(6)}")  # 720
 
 # EJ 4
 
@@ -87,13 +94,15 @@ def filtrar_estudiantes(lista_estudiantes):
   aprobados = filter(lambda est: promedio(est["calificaciones"]) >= 6, lista_estudiantes)
   return list(aprobados)
 
-print("--- Pruebas de filtrado de estudiantes (promedio >= 6) ---")
+print("\n" + "="*60)
+print("  EJ 4: Pruebas de filtrado de estudiantes (promedio >= 6)")
+print("="*60)
 # Juan, Pedro y Maria aprueban; Ana y Luis suspenden)
-print("1. Caso general:", filtrar_estudiantes(estudiantes))
-print("2. Todos aprueban:", filtrar_estudiantes([{"nombre": "Carlos", "calificaciones": [8, 9, 10]}, {"nombre": "Lucia", "calificaciones": [6, 7, 6]}]))
-print("3. Ninguno aprueba:", filtrar_estudiantes([{"nombre": "Jorge", "calificaciones": [2, 3, 4]}, {"nombre": "Elena", "calificaciones": [5, 5, 5]}]))
-print("4. Casos límite:", filtrar_estudiantes([{"nombre": "Casi", "calificaciones": [6, 6, 5]}, {"nombre": "Justo", "calificaciones": [5, 6, 7]}]))
-print("5. Distinto número de notas:", filtrar_estudiantes([{"nombre": "Uno", "calificaciones": [6]}, {"nombre": "Varios", "calificaciones": [10, 2, 8, 4, 6]}]))
+print(f"  1. Caso general:\n     {filtrar_estudiantes(estudiantes)}")
+print(f"  2. Todos aprueban:\n     {filtrar_estudiantes([{'nombre': 'Carlos', 'calificaciones': [8, 9, 10]}, {'nombre': 'Lucia', 'calificaciones': [6, 7, 6]}])}")
+print(f"  3. Ninguno aprueba:\n     {filtrar_estudiantes([{'nombre': 'Jorge', 'calificaciones': [2, 3, 4]}, {'nombre': 'Elena', 'calificaciones': [5, 5, 5]}])}")
+print(f"  4. Casos límite:\n     {filtrar_estudiantes([{'nombre': 'Casi', 'calificaciones': [6, 6, 5]}, {'nombre': 'Justo', 'calificaciones': [5, 6, 7]}])}")
+print(f"  5. Distinto número de notas:\n     {filtrar_estudiantes([{'nombre': 'Uno', 'calificaciones': [6]}, {'nombre': 'Varios', 'calificaciones': [10, 2, 8, 4, 6]}])}")
 
 # EJ 5 - HaveIBeenPawned
 
@@ -105,12 +114,12 @@ def gen_hash_sha1(pwd):
 
 def gen_hash_ntlm(pwd):
   txt_bytes = pwd.encode('utf-16le')
-  hash_hex = hashlib.new('md4', txt_bytes).hexdigest()
+  hash_hex = MD4.new(txt_bytes).hexdigest()
   return hash_hex.upper()
 
 # Callback general para errores
 def errors(err_msg):
-  print(f"[[ERROR]]: {err_msg}")
+  print(f"  [[ERROR]]: {err_msg}")
 
 
 # Gestión de peticiones
@@ -128,11 +137,11 @@ def request(url, callback_success, callback_error):
 def show_domain_breach(answer):
   breaches = answer.json()
   if not breaches:
-    print("No breaches for this domain.")
+    print("  [OK] No breaches for this domain.")
   else:
-    format_breach = lambda b: f" - {b.get('Title', 'No Title')} (Date: {b.get('BreachDate', 'N/A')}, Affected Accounts: {b.get('PwnCount', 0)})"
+    format_breach = lambda b: f"    - {b.get('Title', 'No Title'):<22} | Date: {b.get('BreachDate', 'N/A')} | Affected Accounts: {b.get('PwnCount', 0):,}"
     txt_list = list(map(format_breach, breaches))
-    print(f"Found {len(txt_list)} breaches for this domain: \n" + "\n".join(txt_list))
+    print(f"  [!] Found {len(txt_list)} breaches for this domain:\n" + "\n".join(txt_list))
 
 # Comprueba contraseña con CALLBACK tipo hash
 def check_password(pwd, callback_hash, ntlm_mode=False):
@@ -152,28 +161,31 @@ def check_password(pwd, callback_hash, ntlm_mode=False):
     matches = list(filter(lambda line : line.startswith(sufix), lines))
 
     if matches:
-      times = matches[0].split(":")[1]
-      print(f"Password {pwd} appeared {times} times in data breaches.")
+      times = int(matches[0].split(":")[1])
+      print(f"  [!] Password '{pwd}' appeared {times:,} times in data breaches.")
     else:
-      print(f"Password {pwd} does not appear in any data breaches.")
+      print(f"  [OK] Password '{pwd}' does not appear in any data breaches.")
 
   request(url, verify_sufix, errors)
 
 # Comprobación
 def check_domain(domain):
+  print(f"\n  -> Checking domain: {domain}")
   url = f"https://haveibeenpwned.com/api/v3/breaches?Domain={domain}"
   request(url, show_domain_breach, errors)
 
 # Menú de elección
 def menu():
-    print("\n=== HAVE I BEEN PWNED ===")
-    print("1. Searching by range (contraseñas)")
-    print("2. Breached sites (dominios)")
-    modo = input("Selecciona (1 o 2): ").strip()
+    print("\n" + "="*60)
+    print("  HAVE I BEEN PWNED - MENU")
+    print("="*60)
+    print("  1. Searching by range (contraseñas)")
+    print("  2. Breached sites (dominios)")
+    modo = input("\n  Selecciona (1 o 2): ").strip()
 
     if modo == "1":
-        formato = input("Especifica formato HASH - Estándar (SHA1) o Windows (NTLM): ").strip().upper()
-        pwd = input("Introducir contraseña a verificar: ")
+        formato = input("  Especifica formato HASH - Estándar (SHA1) o Windows (NTLM): ").strip().upper()
+        pwd = input("  Introducir contraseña a verificar: ")
 
         if formato == "SHA1":
             # Pasamos la función generar_hash_sha1 como CALLBACK (sin paréntesis)
@@ -185,39 +197,46 @@ def menu():
             errors("Formato de hash no válido. Debe elegir SHA1 o NTLM.")
 
     elif modo == "2":
-        dominio = input("Introduzca el dominio a consultar (ej. adobe.com): ").strip()
+        dominio = input("  Introduzca el dominio a consultar (ej. adobe.com): ").strip()
         check_domain(dominio)
     else:
         errors("Modo no reconocido. Seleccionar 1 o 2.")
 
 if __name__ == "__main__":
-    print("--- 1. PRUEBAS DE generar_hash_sha1 (5 ejemplos) ---")
-    print("SHA1 '123456':", gen_hash_sha1("123456"))
-    print("SHA1 'password':", gen_hash_sha1("password"))
-    print("SHA1 'admin':", gen_hash_sha1("admin"))
-    print("SHA1 'qwerty':", gen_hash_sha1("qwerty"))
-    print("SHA1 'U-tad2026!':", gen_hash_sha1("U-tad2026!"))
+    print("\n" + "="*60)
+    print("  1. PRUEBAS DE generar_hash_sha1 (5 ejemplos)")
+    print("="*60)
+    print(f"  SHA1 '123456':     {gen_hash_sha1('123456')}")
+    print(f"  SHA1 'password':   {gen_hash_sha1('password')}")
+    print(f"  SHA1 'admin':      {gen_hash_sha1('admin')}")
+    print(f"  SHA1 'qwerty':     {gen_hash_sha1('qwerty')}")
+    print(f"  SHA1 'U-tad2026!': {gen_hash_sha1('U-tad2026!')}")
 
-    print("\n--- 2. PRUEBAS DE generar_hash_ntlm (5 ejemplos) ---")
-    print("NTLM '123456':", gen_hash_ntlm("123456"))
-    print("NTLM 'password':", gen_hash_ntlm("password"))
-    print("NTLM 'admin':", gen_hash_ntlm("admin"))
-    print("NTLM 'qwerty':", gen_hash_ntlm("qwerty"))
-    print("NTLM 'U-tad2026!':", gen_hash_ntlm("U-tad2026!"))
+    print("\n" + "="*60)
+    print("  2. PRUEBAS DE generar_hash_ntlm (5 ejemplos)")
+    print("="*60)
+    print(f"  NTLM '123456':     {gen_hash_ntlm('123456')}")
+    print(f"  NTLM 'password':   {gen_hash_ntlm('password')}")
+    print(f"  NTLM 'admin':      {gen_hash_ntlm('admin')}")
+    print(f"  NTLM 'qwerty':     {gen_hash_ntlm('qwerty')}")
+    print(f"  NTLM 'U-tad2026!': {gen_hash_ntlm('U-tad2026!')}")
 
-    print("\n--- 3. PRUEBAS DE comprobar_password con callbacks SHA1 y NTLM (5 ejemplos) ---")
+    print("\n" + "="*60)
+    print("  3. PRUEBAS DE comprobar_password con callbacks SHA1 y NTLM")
+    print("="*60)
     check_password("123456", gen_hash_sha1, ntlm_mode=False)
     check_password("password", gen_hash_sha1, ntlm_mode=False)
-    check_password("admin", gen_hash_ntlm, ntlm_mode=True)
-    check_password("qwerty", gen_hash_ntlm, ntlm_mode=True)
-    check_password("ClaveUltraSeguraInexistente998877!", gen_hash_sha1, ntlm_mode=False)
+    check_password("jungkook", gen_hash_ntlm, ntlm_mode=True)
+    check_password("tumadre", gen_hash_ntlm, ntlm_mode=True)
+    check_password("ClaveUltraSeguraInexistente676767!", gen_hash_sha1, ntlm_mode=False)
 
-    print("\n--- 4. PRUEBAS DE comprobar_dominio (5 ejemplos) ---")
+    print("\n" + "="*60)
+    print("  4. PRUEBAS DE comprobar_dominio (5 ejemplos)")
+    print("="*60)
     check_domain("adobe.com")
     check_domain("linkedin.com")
-    check_domain("dropbox.com")
-    check_domain("yahoo.com")
-    check_domain("dominioinventadoquenoexiste12345.com")
+    check_domain("wattpad.com")
+    check_domain("adobe.com")
+    check_domain("dominioinventadoquenoexisteLALALA.com")
 
-    # Finalmente, lanzamos el menú interactivo para el usuario
     menu()
